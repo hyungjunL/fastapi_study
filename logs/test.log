@@ -1,0 +1,9 @@
+[2023-12-14 14:02:34.421] WARNING [24188] - Python-dotenv could not parse statement starting at line 1
+[2023-12-14 14:02:34.424] WARNING [24188] - Python-dotenv could not parse statement starting at line 7
+[2023-12-14 14:02:36.936] INFO [24188] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+[2023-12-14 14:02:36.936] INFO [24188] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+[2023-12-14 14:02:37.033] INFO [24188] - APPLICATION STARTED
+[2023-12-14 14:02:38.244] WARNING [41360] - Python-dotenv could not parse statement starting at line 1
+[2023-12-14 14:02:38.245] WARNING [41360] - Python-dotenv could not parse statement starting at line 7
+[2023-12-14 14:02:38.388] INFO [41360] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+[2023-12-14 14:02:38.391] INFO [41360] - Adding job tentatively -- it will be properly scheduled when the scheduler starts

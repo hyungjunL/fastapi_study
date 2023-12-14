@@ -7,12 +7,11 @@ from database.conn import db
 from common.config import conf
 from common.log_config import logger
 from routes import test_route,radar_route
-from middlewares.some_middelware import LoggingMiddleware,CorsMiddleware
+from middlewares.some_middelware import LoggingMiddleware
 from task.test_task import TestTask, SecondTask
 
 middleware = [
-    Middleware(LoggingMiddleware),
-    CORSMiddleware(CorsMiddleware)
+    Middleware(LoggingMiddleware)
 ]
 
 def create_app():

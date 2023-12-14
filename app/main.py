@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database.conn import db
 from common.config import conf
 from common.log_config import logger
-from routes import test_route
+from routes import test_route,radar_route
 from middlewares.some_middelware import LoggingMiddleware,CorsMiddleware
 from task.test_task import TestTask, SecondTask
 
@@ -16,17 +16,7 @@ middleware = [
 ]
 
 def create_app():
-    app = FastAPI()
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-    app.add_middleware(
-        Middleware
-    )
+    app = FastAPI(middleware=middleware)
     # config 설정들 가져오기
     c = conf()
     conf_dict = asdict(c)
@@ -35,6 +25,7 @@ def create_app():
     
     # 라우터 정의
     app.include_router(test_route.router, tags=["TEST"])
+    app.include_router(radar_route.router, tags=["RADAR"])
     
     return app
 

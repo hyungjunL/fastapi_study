@@ -1,7 +1,7 @@
 import logging
 from logging.handlers import TimedRotatingFileHandler
 
-class log_config:
+class LogConfig:
     def log_start():
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
@@ -23,4 +23,4 @@ class log_config:
         return logger
 
 
-logger = log_config.log_start()
+logger = LogConfig.log_start()

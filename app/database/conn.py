@@ -1,60 +1,24 @@
-from fastapi import FastAPI
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from common.log_config import logger
-from contextlib import asynccontextmanager
+from sqlalchemy.orm import sessionmaker, declarative_base
+import dotenv
+import os
+from dataclasses import asdict
+from common.config import conf
 
+dotenv.load_dotenv()
 
+# TODO split db credentials into env variables
+c = conf()
+conf_dict = asdict(c)
 
-class SQLAlchemy:
-    def __init__(self, app: FastAPI = None, **kwargs):
-        self._engine = None
-        self._session = None
-        if app is not None:
-            self.init_app(app=app, **kwargs)
+DB_USERNAME : str = conf_dict.get("DB_USERNAME") #os.getenv("DB_USERNAME") 
+DB_PASSWORD : str = conf_dict.get("DB_PASSWORD")
+DB_HOST : str = conf_dict.get("DB_HOST")
+DB_PORT : str = conf_dict.get("DB_PORT")
+DB_DATABASE : str = conf_dict.get("DB_DATABASE")
 
-    def init_app(self, app: FastAPI, **kwargs):
-        database_url = kwargs.get("DB_URL")
-        pool_recycle = kwargs.setdefault("DB_POOL_RECYCLE", 900)
-        echo = kwargs.setdefault("DB_ECHO", True)
+SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}?charset=utf8mb4"
 
-        self._engine = create_engine(
-            database_url,
-            echo=echo,
-            pool_recycle=pool_recycle,
-            pool_pre_ping=True,
-        )
-        self._session = sessionmaker(autocommit=False, autoflush=False, bind=self._engine)
-
-        @app.on_event("startup") 
-        def startup():
-            self._engine.connect()
-            logger.info("DB connected.")
-
-        @app.on_event("shutdown")
-        def shutdown():
-            self._session.close_all()
-            self._engine.dispose()
-            logger.info("DB disconnected")
-
-    def get_db(self):
-        if self._session is None:
-            raise Exception("must be called 'init_app'")
-        db_session = None
-        try:
-            db_session = self._session()
-            yield db_session
-        finally:
-            db_session.close()
-
-    @property
-    def session(self):
-        return self.get_db
-
-    @property
-    def engine(self):
-        return self._engine
-    
-db = SQLAlchemy()
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+SessionMaker = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()

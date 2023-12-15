@@ -27,16 +27,9 @@ class LocalConfig(Config):
 
 @dataclass
 class ProdConfig(Config):
-    DB_USERNAME : str = os.getenv("DB_USERNAME") 
-    DB_PASSWORD : str = os.getenv("DB_PASSWORD")
-    DB_HOST : str = os.getenv("DB_HOST")
-    DB_PORT : str = os.getenv("DB_PORT")
-    DB_DATABASE : str = os.getenv("DB_DATABASE")
-
-    DB_URL = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}?charset=utf8mb4"
     PROJ_RELOAD: bool = False
 
 
 def conf():
     config = dict(prod=ProdConfig(), local=LocalConfig())
-    return config.get(environ.get("API_ENV", "local"))
+    return config.get(environ.get("API_ENV", os.getenv("PROFILES")))

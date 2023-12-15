@@ -1,15 +1,16 @@
-from database.conn import db
+#from database.conn import db
 from fastapi.responses import JSONResponse
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session, sessionmaker
-from models import Test
+from models.test import Test
 from dataclasses import asdict
-from database.schemas import Item
+from schemas.user import Item
 from sqlalchemy import text
 import asyncio
 from common.log_config import logger
+from decorators.database import transaction
 
-class TestService:
+class TestServce:
     async def select(db : Session):
         query = text("SELECT * FROM test")
         # example = db.query(test).all()
@@ -21,9 +22,9 @@ class TestService:
             "number": result[2]
         }
         return JSONResponse(content=item)
-
-    async def insert(item : Item, db : Session):
-        
+    
+    @transaction
+    async def insert(item : Item, db):
         logger.info(f"## INSERT ITEM INFO : {item.id}, {item.name}, {item.number}")
         print(id(logger))
         try:
@@ -42,9 +43,8 @@ class TestService:
             return JSONResponse(content=None, status_code=500, headers={"Custom-Header": "value"})
         
 
-
-    async def update(item : Item,db : Session):
-
+    @transaction
+    async def update(item : Item, db):
         logger.info(f"## INSERT UPDATE INFO : {item.id}, {item.name}, {item.number}")
         print(id(logger))
         try:
@@ -60,11 +60,6 @@ class TestService:
             db.rollback()
             logger.error(f"## ITEM UPDATE ERROR : {e},{e.__traceback__}")
             return JSONResponse(content=None, status_code=500, headers={"Custom-Header": "value"})
-
-
-
-
-
 
 
 

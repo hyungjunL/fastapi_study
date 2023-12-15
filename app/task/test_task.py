@@ -4,9 +4,9 @@ from common.log_config import logger
 import asyncio
 
 async def real_job():           
-    while True:
-        logger.info("#### INTERVAL ....")
-        await asyncio.sleep(1.0)
+        while True:
+            logger.info("#### INTERVAL ....")
+            await asyncio.sleep(1.0)
 
 class TestTask:
     sched = BackgroundScheduler(timezone='Asia/Seoul')
@@ -14,7 +14,9 @@ class TestTask:
     @sched.scheduled_job('interval', seconds=10, id='test')
     def job():
         asyncio.run(real_job())
-        
+    
+    
+
 class SecondTask:
     sched = BackgroundScheduler(timezone='Asia/Seoul')
 

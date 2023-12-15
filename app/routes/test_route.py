@@ -1,21 +1,23 @@
 from fastapi import APIRouter, Depends
-from services import test_service
+from services.test_service import TestService as testService
 from sqlalchemy.orm import Session
 from database.conn import db
-from database.schemas import item
+from database.schemas import Item
 
-router = APIRouter(
-    prefix="/test"
-)
+class TestRoute:
 
-@router.get("/select")#,response_model=item)
-async def test(db : Session = Depends(db.session)):
-    return test_service.select(db=db)
+    router = APIRouter(
+        prefix="/test"
+    )
 
-@router.post("/insert")#,response_model=item)
-async def test(item : item,db : Session = Depends(db.session)):
-    return await test_service.insert(item, db=db)
+    @router.get("/select")#,response_model=Item)
+    async def test(db : Session = Depends(db.session)):
+        return testService.select(db=db)
 
-@router.post("/update")#,response_model=item)
-async def test(item : item, db : Session = Depends(db.session)):
-    return await test_service.update(item, db=db)
+    @router.post("/insert")#,response_model=Item)
+    async def test(item : Item,db : Session = Depends(db.session)):
+        return await testService.insert(item, db=db)
+
+    @router.post("/update")#,response_model=Item)
+    async def test(item : Item, db : Session = Depends(db.session)):
+        return await testService.update(item, db=db)

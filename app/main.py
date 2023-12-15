@@ -3,10 +3,11 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
+from routes.user_route import UserRoute as userRoute
 from database.conn import db
 from common.config import conf
 from common.log_config import logger
-from routes import test_route,radar_route
+from routes.test_route import TestRoute as testRoute
 from middlewares.some_middelware import LoggingMiddleware
 from task.test_task import TestTask, SecondTask
 
@@ -23,8 +24,8 @@ def create_app():
     db.init_app(app, **conf_dict)
     
     # 라우터 정의
-    app.include_router(test_route.router, tags=["TEST"])
-    app.include_router(radar_route.router, tags=["RADAR"])
+    app.include_router(testRoute.router, tags=["TEST"])
+    app.include_router(userRoute.router, tags=["USER"])
     
     return app
 
